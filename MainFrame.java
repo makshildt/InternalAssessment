@@ -24,6 +24,9 @@ public class MainFrame extends JFrame {
 	String teamInfo[] = {"nameofcomp, testcrit"};
 	int ArrayCounter = 0;
 
+	Team[] teams = new Team[5];
+	int numTeams = 0;
+
 	/**
 	 * Launch the application.
 	 */
@@ -89,8 +92,14 @@ public class MainFrame extends JFrame {
 		panel1.setBackground(Color.RED);
 		PanelMain.add(panel1, "name_53911858030200");
 		
-		lbTestName = new JLabel("");
-		panel1.add(lbTestName);
+		for (int i = 0; i < numTeams; i++) {
+			lbTestName = new JLabel(teams[i].getName());
+			panel1.add(lbTestName);
+		
+		}
+
+		
+
 		
 		//PANEL 2 ----------------------
 		
@@ -109,13 +118,16 @@ public class MainFrame extends JFrame {
 		btnOkNewTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				teamInfo[0] = tfNameNewTeam.getText();
-				lbTestName.setText(teamInfo[0]);
-				ArrayCounter = ArrayCounter + 1;
-				System.out.println(ArrayCounter);
+				teams[numTeams] = new Team(teamInfo[0]);
+				// lbTestName.setText(teamInfo[0]);
+				// ArrayCounter = ArrayCounter + 1;
+				// System.out.println(ArrayCounter);
 			}
 		});
 		panel2.add(btnOkNewTeam);
 		
+
+
 		//PANEL 3 ----------------------
 		
 		JPanel panel3 = new JPanel();
