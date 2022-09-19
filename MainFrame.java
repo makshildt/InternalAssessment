@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import java.awt.GridLayout;
 
 public class MainFrame extends JFrame {
 
@@ -21,8 +22,17 @@ public class MainFrame extends JFrame {
 	private JTextField tfNameNewTeam;
 	private JLabel lbAddNewTeam;
 	private JLabel lbTestName;
-	String teamInfo[] = {"nameofcomp, testcrit"};
 	int ArrayCounter = 0;
+
+	Team[] teams = new Team[10];
+	int numTeams = 0;
+	JLabel[] labels = new JLabel[10];
+	int numLabels = 0;
+
+	//FONTS 
+	Font normaltext = new Font("Monospaced", Font.PLAIN, 20);
+	Font title = new Font("Monospaced", Font.PLAIN, 30);
+	public static String team = "Team: "; 
 
 	/**
 	 * Launch the application.
@@ -85,12 +95,36 @@ public class MainFrame extends JFrame {
 		
 		//PANEL 1 ----------------------
 		
-		JPanel panel1 = new JPanel();
+		//GIRD LAYOUT MAKES LABELS STACK ON TOP OF EACH OTHER
+		JPanel panel1 = new JPanel(new GridLayout(0, 1, 10, 10));
 		panel1.setBackground(Color.RED);
 		PanelMain.add(panel1, "name_53911858030200");
-		
-		lbTestName = new JLabel("");
-		panel1.add(lbTestName);
+
+		JLabel panelOneTitle = new JLabel("Welcome To Panel 1");
+		panel1.add(panelOneTitle);
+		panelOneTitle.setFont(title);
+		panelOneTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JLabel panelOneTeamNames = new JLabel("Teams: ");
+		panel1.add(panelOneTeamNames);
+		panelOneTeamNames.setFont(normaltext);
+		panelOneTeamNames.setHorizontalAlignment(SwingConstants.LEFT);
+			
+		// for (int i = 0; i < numTeams; i++) {
+		// 	//lbTestName = new JLabel(teams[i].getName());
+		// 	//anel1.add(lbTestName);
+		// 	JLabel newteamone = new JLabel(teams[i].getName());
+		// 	panel1.add(newteamone);
+		// }
+
+		//FOR LOOP TO ADD LABELS TO PANEL 1
+		for (int i = 0; i < 10; i++) {
+			JLabel newteamone = new JLabel();
+			labels[i] = newteamone;
+			panel1.add(newteamone);
+			panel1.setFont(normaltext);
+		}
+
 		
 		//PANEL 2 ----------------------
 		
@@ -105,17 +139,32 @@ public class MainFrame extends JFrame {
 		panel2.add(tfNameNewTeam);
 		tfNameNewTeam.setColumns(10);
 		
+		//EVERYTIME SUBMIT IS PRESSED IT ADDS A NEW TEAM TO THE ARRAY AND INCREMENTS THE TEAM COUNTER.
+		//EVERYTIME SUBMIT IS PRESSED IT ADDS A NEW LABEL TO THE ARRAY AND INCREMENTS THE LABEL COUNTER.
 		JButton btnOkNewTeam = new JButton("Submit");
 		btnOkNewTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				teamInfo[0] = tfNameNewTeam.getText();
-				lbTestName.setText(teamInfo[0]);
-				ArrayCounter = ArrayCounter + 1;
-				System.out.println(ArrayCounter);
+				//if a team by the same name already exists it will not add a new team and print an error message in the tfNameNewteam text field.
+				for (int i = 0; i < numTeams; i++) {
+					if (tfNameNewTeam.getText().equals(teams[i].getName())) {
+						tfNameNewTeam.setText("Team already exists");
+						return;
+					}
+				}
+				teams[numTeams] = new Team(tfNameNewTeam.getText());
+				numTeams ++;
+				// lbTestName.setText(teamInfo[0]);
+				// ArrayCounter = ArrayCounter + 1;
+				// System.out.println(ArrayCounter);
+				labels[numLabels].setText(tfNameNewTeam.getText());
+				numLabels = numLabels + 1;
+				tfNameNewTeam.setText("");
 			}
 		});
 		panel2.add(btnOkNewTeam);
 		
+
+
 		//PANEL 3 ----------------------
 		
 		JPanel panel3 = new JPanel();
@@ -207,5 +256,3 @@ public class MainFrame extends JFrame {
 		
 	}
 }
-
-
