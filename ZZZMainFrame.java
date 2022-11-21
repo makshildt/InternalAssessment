@@ -72,7 +72,25 @@ public class ZZZMainFrame extends JFrame {
 //		} catch (Exception e) {
 //			System.out.println(e.getMessage());
 //		}
+//		
+		//FIX THIS FOR UPDAING DATABSE
+
+//		try {
+//			db.connect();
+//			ResultSet resultSet = db.query("SELECT first_name FROM USERS;");
 //
+//			while (resultSet.next()) {
+//				String name = resultSet.getString(1);
+//				System.out.println(name);
+//			}
+//
+//			db.disconnect();
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//
+		
+
 //		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -195,11 +213,12 @@ public class ZZZMainFrame extends JFrame {
 				labels[numLabels].setText(tfNameNewTeam.getText());
 				numLabels = numLabels + 1;
 				tfNameNewTeam.setText("");
+				//System.out.println(Arrays.toString(teams));	
 			}
 		});
 		panel2.add(btnOkNewTeam);
 		
-
+		
 
 		//PANEL 3 ----------------------
 
@@ -330,9 +349,13 @@ public class ZZZMainFrame extends JFrame {
 		gbc_lblNewLabel_7.gridx = 4;
 		gbc_lblNewLabel_7.gridy = 10;
 		panel3.add(lblNewLabel_7, gbc_lblNewLabel_7);
-		
-		JComboBox comboBox = new JComboBox();
+
+		//KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+		String[] test = {"Other", "Other2"};
+
+		JComboBox comboBox = new JComboBox(test);
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 5;
@@ -343,7 +366,7 @@ public class ZZZMainFrame extends JFrame {
 		gbc_btnNewButton.gridx = 5;
 		gbc_btnNewButton.gridy = 11;
 
-        String[] info = new String[6];
+        String[] info = new String[7];
 		
 		JButton btnNewButton = new JButton("Submit");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -360,6 +383,7 @@ public class ZZZMainFrame extends JFrame {
                 info[3] = textField_3.getText();
                 info[4] = textField_4.getText();
                 info[5] = textField_5.getText();
+				info[6] = comboBox.getSelectedItem().toString();
 				System.out.println(Arrays.toString(info));
 				}
 			}
