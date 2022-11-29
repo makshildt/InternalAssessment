@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
@@ -33,6 +34,7 @@ public class ZZZMainFrame extends JFrame {
 	private JTextField tfNameNewTeam;
 	private JLabel lbAddNewTeam;
 	private JLabel lbTestName;
+	private JComboBox teamsComboBox = new JComboBox();
 	int ArrayCounter = 0;
 
 	Team[] teams = new Team[10];
@@ -43,7 +45,7 @@ public class ZZZMainFrame extends JFrame {
 	//FONTS 
 	Font normaltext = new Font("Monospaced", Font.PLAIN, 20);
 	Font title = new Font("Monospaced", Font.PLAIN, 30);
-	public static String team = "Team: "; 
+	public static String team = "Team: ";
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -72,25 +74,7 @@ public class ZZZMainFrame extends JFrame {
 //		} catch (Exception e) {
 //			System.out.println(e.getMessage());
 //		}
-//		
-		//FIX THIS FOR UPDAING DATABSE
-
-//		try {
-//			db.connect();
-//			ResultSet resultSet = db.query("SELECT first_name FROM USERS;");
 //
-//			while (resultSet.next()) {
-//				String name = resultSet.getString(1);
-//				System.out.println(name);
-//			}
-//
-//			db.disconnect();
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//		}
-//
-		
-
 //		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -198,6 +182,7 @@ public class ZZZMainFrame extends JFrame {
 		JButton btnOkNewTeam = new JButton("Submit");
 		btnOkNewTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/*
 				//if a team by the same name already exists it will not add a new team and print an error message in the tfNameNewteam text field.
 				for (int i = 0; i < numTeams; i++) {
 					if (tfNameNewTeam.getText().equals(teams[i].getName())) {
@@ -205,6 +190,14 @@ public class ZZZMainFrame extends JFrame {
 						return;
 					}
 				}
+ 				*/
+				String name = tfNameNewTeam.getText();
+				TestDb db = new TestDb().connect();
+				db.execute("INSERT INTO Teams (team_name) VALUES ('" + name + "')");
+				db.disconnect();
+
+				updateTeamList();
+
 				teams[numTeams] = new Team(tfNameNewTeam.getText());
 				numTeams ++;
 				// lbTestName.setText(teamInfo[0]);
@@ -213,12 +206,11 @@ public class ZZZMainFrame extends JFrame {
 				labels[numLabels].setText(tfNameNewTeam.getText());
 				numLabels = numLabels + 1;
 				tfNameNewTeam.setText("");
-				//System.out.println(Arrays.toString(teams));	
 			}
 		});
 		panel2.add(btnOkNewTeam);
 		
-		
+
 
 		//PANEL 3 ----------------------
 
@@ -349,24 +341,21 @@ public class ZZZMainFrame extends JFrame {
 		gbc_lblNewLabel_7.gridx = 4;
 		gbc_lblNewLabel_7.gridy = 10;
 		panel3.add(lblNewLabel_7, gbc_lblNewLabel_7);
-
-		//KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-		String[] test = {"Other", "Other2"};
-
-		JComboBox comboBox = new JComboBox(test);
+		
+		
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 5;
 		gbc_comboBox.gridy = 10;
-		panel3.add(comboBox, gbc_comboBox);
+		panel3.add(teamsComboBox, gbc_comboBox);
+
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton.gridx = 5;
 		gbc_btnNewButton.gridy = 11;
 
-        String[] info = new String[7];
+        String[] info = new String[6];
 		
 		JButton btnNewButton = new JButton("Submit");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -383,7 +372,6 @@ public class ZZZMainFrame extends JFrame {
                 info[3] = textField_3.getText();
                 info[4] = textField_4.getText();
                 info[5] = textField_5.getText();
-				info[6] = comboBox.getSelectedItem().toString();
 				System.out.println(Arrays.toString(info));
 				}
 			}
@@ -474,5 +462,31 @@ public class ZZZMainFrame extends JFrame {
 		});
 		
 		
+	}
+
+	void updateTeamList() {
+		System.out.println("UPDATE COMBO");
+		teamsComboBox.removeAllItems();
+		TestDb db = new TestDb().connect();
+		ResultSet resultSet = db.query("SELECT team_name FROM teams");
+
+		try {
+			while (resultSet.next()) {
+				String name = resultSet.getString("team_name");
+				teamsComboBox.addItem(name);
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		/*
+		//FOR LOOP TO ADD LABELS TO PANEL 1
+		for (int i = 0; i < 10; i++) {
+			JLabel newteamone = new JLabel();
+			labels[i] = newteamone;
+			//panel1.add(newteamone);
+			//panel1.setFont(normaltext);
+		}
+		*/
 	}
 };
